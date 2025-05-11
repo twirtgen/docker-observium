@@ -5,6 +5,10 @@ function WriteLog() {
   return 0
 }
 
+function escape() {
+  printf '%s' "${1}" | sed 's/[^[:alnum:]]/\\&/g'
+}
+
 # dynamically enforce timezone in container
 if [ -n "${TZ}" ]; then
    WriteLog "Set timezone to '${TZ}'"
@@ -46,13 +50,13 @@ WriteLog "Add admin user"
 # create a reusable environment for cronjobs
 WriteLog "Build environment script for cronjobs"
 (
-   echo "export OBSERVIUM_ADMIN_USER=${OBSERVIUM_ADMIN_USER}"
-   echo "export OBSERVIUM_ADMIN_PASS=${OBSERVIUM_ADMIN_PASS}"
-   echo "export OBSERVIUM_DB_HOST=${OBSERVIUM_DB_HOST}"
-   echo "export OBSERVIUM_DB_USER=${OBSERVIUM_DB_USER}"
-   echo "export OBSERVIUM_DB_PASS=${OBSERVIUM_DB_PASS}"
-   echo "export OBSERVIUM_DB_NAME=${OBSERVIUM_DB_NAME}"
-   echo "export OBSERVIUM_BASE_URL=${OBSERVIUM_BASE_URL}"
+  echo "export OBSERVIUM_ADMIN_USER="$(escape "${OBSERVIUM_ADMIN_USER}")""
+  echo "export OBSERVIUM_ADMIN_PASS="$(escape "${OBSERVIUM_ADMIN_PASS}")""
+  echo "export OBSERVIUM_DB_HOST="$(escape "${OBSERVIUM_DB_HOST}")""
+  echo "export OBSERVIUM_DB_USER="$(escape "${OBSERVIUM_DB_USER}")""
+  echo "export OBSERVIUM_DB_PASS="$(escape "${OBSERVIUM_DB_PASS}")""
+  echo "export OBSERVIUM_DB_NAME="$(escape "${OBSERVIUM_DB_NAME}")""
+  echo "export OBSERVIUM_BASE_URL="$(escape "${OBSERVIUM_BASE_URL}")""
 ) > "/opt/observium/observium-setenv.sh"
 chmod 750 "/opt/observium/observium-setenv.sh"
 

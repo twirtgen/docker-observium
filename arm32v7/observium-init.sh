@@ -3,6 +3,11 @@
 count=0
 rc=1
 
+function escape() {
+  printf '%s' "${1}" | sed 's/[^[:alnum:]]/\\&/g'
+}
+
+
 while [ $rc -ne 0 ]
 do
    let count++
@@ -28,11 +33,11 @@ else
   sleep 5
 fi
 
-echo "export OBSERVIUM_ADMIN_USER=$OBSERVIUM_ADMIN_USER" >> /opt/observium/observium-setenv.sh
-echo "export OBSERVIUM_ADMIN_PASS=$OBSERVIUM_ADMIN_PASS" >> /opt/observium/observium-setenv.sh
-echo "export OBSERVIUM_DB_HOST=$OBSERVIUM_DB_HOST" >> /opt/observium/observium-setenv.sh
-echo "export OBSERVIUM_DB_USER=$OBSERVIUM_DB_USER" >> /opt/observium/observium-setenv.sh
-echo "export OBSERVIUM_DB_PASS=$OBSERVIUM_DB_PASS" >> /opt/observium/observium-setenv.sh
-echo "export OBSERVIUM_DB_NAME=$OBSERVIUM_DB_NAME" >> /opt/observium/observium-setenv.sh
+echo "export OBSERVIUM_ADMIN_USER="$(escape "${OBSERVIUM_ADMIN_USER}")"" >> /opt/observium/observium-setenv.sh
+echo "export OBSERVIUM_ADMIN_PASS="$(escape "${OBSERVIUM_ADMIN_PASS}")"" >> /opt/observium/observium-setenv.sh
+echo "export OBSERVIUM_DB_HOST="$(escape "${OBSERVIUM_DB_HOST}")"" >> /opt/observium/observium-setenv.sh
+echo "export OBSERVIUM_DB_USER="$(escape "${OBSERVIUM_DB_USER}")"" >> /opt/observium/observium-setenv.sh
+echo "export OBSERVIUM_DB_PASS="$(escape "${OBSERVIUM_DB_PASS}")"" >> /opt/observium/observium-setenv.sh
+echo "export OBSERVIUM_DB_NAME="$(escape "${OBSERVIUM_DB_NAME}")"" >> /opt/observium/observium-setenv.sh
 
 exit 0

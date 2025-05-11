@@ -120,7 +120,8 @@ WORKDIR /opt/observium
 
 # configure entry point
 COPY supervisord.conf /etc/supervisord.conf
-ENTRYPOINT [ "/usr/bin/supervisord", "-c", "/etc/supervisord.conf" ]
+COPY entrypoint.sh /
+ENTRYPOINT [ "/entrypoint.sh" ]
 
 # expose tcp port
 EXPOSE 80/tcp
