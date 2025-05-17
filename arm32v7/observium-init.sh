@@ -12,14 +12,14 @@ while [ $rc -ne 0 ]
 do
    let count++
    echo "[$count] Verifying coonection to observium database."
-   mysql -h $OBSERVIUM_DB_HOST -u $OBSERVIUM_DB_USER --password=$OBSERVIUM_DB_PASS -e "select 1" $OBSERVIUM_DB_NAME >/dev/null
+   mysql -h "${OBSERVIUM_DB_HOST}" -u "${OBSERVIUM_DB_USER}" --password="${OBSERVIUM_DB_PASS}" -e "select 1" "${OBSERVIUM_DB_NAME}" >/dev/null
    rc=$?
    [ $rc -ne 0 ] && sleep 5
 done
 
 echo "Connected to observium database successfully."
 
-tables=`mysql -h $OBSERVIUM_DB_HOST -u $OBSERVIUM_DB_USER --password=$OBSERVIUM_DB_PASS -e "show tables" $OBSERVIUM_DB_NAME 2>/dev/null`
+tables=`mysql -h "${OBSERVIUM_DB_HOST}" -u "${OBSERVIUM_DB_USER}" --password="${OBSERVIUM_DB_PASS}" -e "show tables" "${OBSERVIUM_DB_NAME}" 2>/dev/null`
 
 if [ -z "$tables" ]
 then
@@ -27,7 +27,7 @@ then
    chown -v www-data:www-data /opt/observium/rrd
    echo "Initializing database schema in first time running for observium."
    /opt/observium/discovery.php -u
-   /opt/observium/adduser.php $OBSERVIUM_ADMIN_USER $OBSERVIUM_ADMIN_PASS 10
+   /opt/observium/adduser.php "${OBSERVIUM_ADMIN_USER}" "${OBSERVIUM_ADMIN_PASS}" 10
 else
   echo "Database schema initialization has been done already."
   sleep 5
